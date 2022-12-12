@@ -18,6 +18,6 @@ The dependencies are as follows:
 Local_IncludePath - Environment variable that points to a directory with the following subdirectories in it:
 
 	boost - Symlink to github.com/boostorg/boost/boost (note, you need to build the headers by running "bootstrap.bat && .\b2 headers" after cloning the repo.)
-	detours - Symlink to github.com/microsoft/detours
+	detours - Symlink to github.com/microsoft/detours (note, you also need to build detours using 'nmake' in the approriate VS buid environment, e.g. x64)
 	dumbnose - Symlink to github.com/dumbnose/dumbnose/lib/dumbnose
 
