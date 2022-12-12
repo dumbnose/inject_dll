@@ -1,0 +1,1 @@
+inject_dll.exe -cmd:"c:\windows\system32\cmd.exe" -setcwd:subdir -dll:app_compat_shim.dll -redirfile:readme.txt,install.txt -debug

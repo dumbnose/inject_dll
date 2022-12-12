@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "inject_dll", "inject_dll.vcxproj", "{F5876268-77E8-4012-BB36-978817C3AE84}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "app_compat_shim", "app_compat_shim\app_compat_shim.vcxproj", "{35AC88A2-4796-4747-A7F1-B8BE768966A2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F5876268-77E8-4012-BB36-978817C3AE84}.Debug|x64.ActiveCfg = Debug|x64
+		{F5876268-77E8-4012-BB36-978817C3AE84}.Debug|x64.Build.0 = Debug|x64
+		{F5876268-77E8-4012-BB36-978817C3AE84}.Debug|x86.ActiveCfg = Debug|Win32
+		{F5876268-77E8-4012-BB36-978817C3AE84}.Debug|x86.Build.0 = Debug|Win32
+		{F5876268-77E8-4012-BB36-978817C3AE84}.Release|x64.ActiveCfg = Release|x64
+		{F5876268-77E8-4012-BB36-978817C3AE84}.Release|x64.Build.0 = Release|x64
+		{F5876268-77E8-4012-BB36-978817C3AE84}.Release|x86.ActiveCfg = Release|Win32
+		{F5876268-77E8-4012-BB36-978817C3AE84}.Release|x86.Build.0 = Release|Win32
+		{35AC88A2-4796-4747-A7F1-B8BE768966A2}.Debug|x64.ActiveCfg = Debug|x64
+		{35AC88A2-4796-4747-A7F1-B8BE768966A2}.Debug|x64.Build.0 = Debug|x64
+		{35AC88A2-4796-4747-A7F1-B8BE768966A2}.Debug|x86.ActiveCfg = Debug|Win32
+		{35AC88A2-4796-4747-A7F1-B8BE768966A2}.Debug|x86.Build.0 = Debug|Win32
+		{35AC88A2-4796-4747-A7F1-B8BE768966A2}.Release|x64.ActiveCfg = Release|x64
+		{35AC88A2-4796-4747-A7F1-B8BE768966A2}.Release|x64.Build.0 = Release|x64
+		{35AC88A2-4796-4747-A7F1-B8BE768966A2}.Release|x86.ActiveCfg = Release|Win32
+		{35AC88A2-4796-4747-A7F1-B8BE768966A2}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 3
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://dumbnose.visualstudio.com/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = inject_dll.vcxproj
+		SccLocalPath1 = .
+		SccProjectUniqueName2 = app_compat_shim\\app_compat_shim.vcxproj
+		SccProjectName2 = app_compat_shim
+		SccLocalPath2 = app_compat_shim
+	EndGlobalSection
+EndGlobal
