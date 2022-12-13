@@ -2,7 +2,8 @@
 
 ## OVERVIEW
 
-This is a sample project that demonstrates how to inject a DLL into a process and then intercept / alter the behavior of APIs. 
+This is a sample project that demonstrates how to inject a DLL into a process and then intercept / alter the behavior of APIs. It derives from an app compat 
+shim project. Building the solution builds two binaries, `inject_dll.exe` and `app_compat_shim.dll`. 
 
 ## BUILDING
 
