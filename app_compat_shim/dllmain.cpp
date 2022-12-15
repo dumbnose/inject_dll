@@ -213,13 +213,13 @@ InterceptedCreateActCtxW(
 
 void hook_functions()
 {
-    DetourTransactionBegin();
-    DetourUpdateThread(GetCurrentThread());
-    DetourAttach(&(PVOID&)RealCreateProcessW, InterceptedCreateProcessW);
-    //DetourAttach(&(PVOID&)RealLoadLibraryExW, InterceptedCreateProcessW);
-    DetourAttach(&(PVOID&)RealCreateFileW, InterceptedCreateFileW);
-    DetourAttach(&(PVOID&)RealCreateActCtxW, InterceptedCreateActCtxW);
-    DetourTransactionCommit();
+    LONG rc = DetourTransactionBegin();
+    rc = DetourUpdateThread(GetCurrentThread());
+    //rc = DetourAttach(&(PVOID&)RealCreateProcessW, InterceptedCreateProcessW);
+    //rc = DetourAttach(&(PVOID&)RealLoadLibraryExW, InterceptedCreateProcessW);
+    rc = DetourAttach(&(PVOID&)RealCreateFileW, InterceptedCreateFileW);
+    rc = DetourAttach(&(PVOID&)RealCreateActCtxW, InterceptedCreateActCtxW);
+    rc = DetourTransactionCommit();
 }
 
 BOOL APIENTRY DllMain( HMODULE hModule,
