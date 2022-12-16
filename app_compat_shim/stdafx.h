@@ -10,7 +10,11 @@
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 // Windows Header Files:
 #include <windows.h>
+#include <psapi.h>
+#include <safeint.h>
 
+#include <string>
+#include <map>
 #include <iostream>
 #include <shlwapi.h>
 #include <shellapi.h>
@@ -18,6 +22,8 @@
 #include <fstream>
 #include <detours\include\detours.h>
 #include <boost/algorithm/string.hpp>
+#include <boost/algorithm/algorithm.hpp>
+#include <boost/nowide/convert.hpp>
 #include <dumbnose/scope_guard.hpp>
 #include <dumbnose\cmdline_options.hpp>
 #include <dumbnose\windows_exception.hpp>

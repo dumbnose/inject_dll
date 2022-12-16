@@ -1,6 +1,7 @@
 // dllmain.cpp : Defines the entry point for the DLL application.
 #include "stdafx.h"
 
+#include "FunctionFinder.hpp"
 
 #pragma comment(lib, "detours.lib")
 #pragma comment(lib, "shlwapi.lib")
@@ -9,7 +10,9 @@
 bool copying_file = false;
 bool debug = false;
 
-decltype(&CreateProcessW) RealCreateProcessW =  CreateProcessW;
+//decltype(&CreateProcessW) RealCreateProcessW = CreateProcessW;
+//HMODULE kernelBase = GetModuleHandle(L"kernelbase.dll");
+decltype(&CreateProcessW) RealCreateProcessW = reinterpret_cast<decltype(&CreateProcessW)>(DetourFindFunction("kernelBase.dll", "CreateProcessW"));
 decltype(&LoadLibraryExW) RealLoadLibraryExW = LoadLibraryExW;
 decltype(&CreateFileW) RealCreateFileW = CreateFileW;
 decltype(&CreateActCtxW) RealCreateActCtxW = CreateActCtxW;
@@ -213,10 +216,21 @@ InterceptedCreateActCtxW(
 
 void hook_functions()
 {
+    FunctionFinder finder;
+    auto OtherRealCreateProcessW = reinterpret_cast<decltype(&CreateProcessW)>(finder.FindFunction("kernelbase.dll", "CreateProcessW"));
+
     LONG rc = DetourTransactionBegin();
     rc = DetourUpdateThread(GetCurrentThread());
+
     //rc = DetourAttach(&(PVOID&)RealCreateProcessW, InterceptedCreateProcessW);
-    //rc = DetourAttach(&(PVOID&)RealLoadLibraryExW, InterceptedCreateProcessW);
+    rc = DetourAttach(&(PVOID&)OtherRealCreateProcessW, InterceptedCreateProcessW);
+    std::wstringstream message; 
+    
+    message << (L"DetourAttach returned: ") << rc << " RealCreateProcessW=" << RealCreateProcessW << " OtherRealCreateProcessW=" << OtherRealCreateProcessW;
+    
+    MessageBox(NULL, message.str().c_str(), L"Result", MB_OK);
+
+    rc = DetourAttach(&(PVOID&)RealLoadLibraryExW, InterceptedLoadLibraryExW);
     rc = DetourAttach(&(PVOID&)RealCreateFileW, InterceptedCreateFileW);
     rc = DetourAttach(&(PVOID&)RealCreateActCtxW, InterceptedCreateActCtxW);
     rc = DetourTransactionCommit();
@@ -239,4 +253,3 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 	}
 	return TRUE;
 }
-

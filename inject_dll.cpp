@@ -84,6 +84,7 @@ int wmain()
         PROCESS_INFORMATION pi;
 
         if (dll.length() > 0) {
+            LoadLibrary(L"app_compat_shim");
             if (!DetourCreateProcessWithDll(nullptr, cmd_cstr, nullptr, nullptr, false, 0, nullptr, nullptr, &si, &pi, dll_cstr, nullptr)) throw dumbnose::windows_exception("DetourCreateProcessWithDll failed.");
         } else {
             if (!CreateProcess(nullptr, cmd_cstr, nullptr, nullptr, false, 0, nullptr, nullptr, &si, &pi)) throw dumbnose::windows_exception("CreateProcess failed.");
