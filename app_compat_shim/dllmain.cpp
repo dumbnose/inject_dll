@@ -9,10 +9,9 @@
 
 bool copying_file = false;
 bool debug = false;
+static CHAR s_dllPath[MAX_PATH];
 
-//decltype(&CreateProcessW) RealCreateProcessW = CreateProcessW;
-//HMODULE kernelBase = GetModuleHandle(L"kernelbase.dll");
-decltype(&CreateProcessW) RealCreateProcessW = reinterpret_cast<decltype(&CreateProcessW)>(DetourFindFunction("kernelBase.dll", "CreateProcessW"));
+decltype(&CreateProcessW) RealCreateProcessW = CreateProcessW;
 decltype(&LoadLibraryExW) RealLoadLibraryExW = LoadLibraryExW;
 decltype(&CreateFileW) RealCreateFileW = CreateFileW;
 decltype(&CreateActCtxW) RealCreateActCtxW = CreateActCtxW;
@@ -136,8 +135,6 @@ InterceptedCreateProcessW(
     _Out_ LPPROCESS_INFORMATION lpProcessInformation
     )
 {
-    //MessageBox(nullptr, L"Intercepted CreateProcessW", L"Intercetped", MB_OK);
-
     return DetourCreateProcessWithDll(
         lpApplicationName,
         lpCommandLine,
@@ -149,7 +146,7 @@ InterceptedCreateProcessW(
         lpCurrentDirectory,
         lpStartupInfo,
         lpProcessInformation,
-        "app_compat_shim.dll",
+        s_dllPath,
         RealCreateProcessW
             );
 
@@ -216,23 +213,13 @@ InterceptedCreateActCtxW(
 
 void hook_functions()
 {
-    FunctionFinder finder;
-    auto OtherRealCreateProcessW = reinterpret_cast<decltype(&CreateProcessW)>(finder.FindFunction("kernelbase.dll", "CreateProcessW"));
-
     LONG rc = DetourTransactionBegin();
     rc = DetourUpdateThread(GetCurrentThread());
-
-    //rc = DetourAttach(&(PVOID&)RealCreateProcessW, InterceptedCreateProcessW);
-    rc = DetourAttach(&(PVOID&)OtherRealCreateProcessW, InterceptedCreateProcessW);
-    std::wstringstream message; 
-    
-    message << (L"DetourAttach returned: ") << rc << " RealCreateProcessW=" << RealCreateProcessW << " OtherRealCreateProcessW=" << OtherRealCreateProcessW;
-    
-    MessageBox(NULL, message.str().c_str(), L"Result", MB_OK);
 
     rc = DetourAttach(&(PVOID&)RealLoadLibraryExW, InterceptedLoadLibraryExW);
     rc = DetourAttach(&(PVOID&)RealCreateFileW, InterceptedCreateFileW);
     rc = DetourAttach(&(PVOID&)RealCreateActCtxW, InterceptedCreateActCtxW);
+    rc = DetourAttach(&(PVOID&)RealCreateProcessW, InterceptedCreateProcessW);
     rc = DetourTransactionCommit();
 }
 
@@ -241,12 +228,23 @@ BOOL APIENTRY DllMain( HMODULE hModule,
                        LPVOID lpReserved
 					 )
 {
+    DWORD result = 0;
+    
 	switch (ul_reason_for_call)
 	{
 	case DLL_PROCESS_ATTACH:
+	
+        result = GetModuleFileNameA(hModule, s_dllPath, MAX_PATH);
+        if (GetLastError() != ERROR_SUCCESS) {
+            event_log.add_error(GetLastError(), "GetModuleFileNameA failed.");
+            
+            return TRUE; // Do no harm. Let the process keep running without being hooked.
+        }
+
         parse_cmdline_file();
         hook_functions();
-	case DLL_THREAD_ATTACH:
+
+    case DLL_THREAD_ATTACH:
 	case DLL_THREAD_DETACH:
 	case DLL_PROCESS_DETACH:
 		break;
